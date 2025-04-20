@@ -45,6 +45,14 @@ body {
   height: 2rem;
   border-radius: 0.5rem;
   resize: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.chat-header .chat-form textarea::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and newer Edge */
 }
 
 .chat-header .chat-form .chat-controls {

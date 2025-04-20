@@ -1,6 +1,4 @@
 
-const API_KEY = 'AIzaSyBN4fQz--u5kHNLOZvkrUnGc7QJgifMbXo'
-const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}';
 
 const createMessageElement = function(content, classes) {
   const div = document.createElement("div");
@@ -10,47 +8,65 @@ const createMessageElement = function(content, classes) {
 }
 
 
-const handleMessage = function(userMessage) {
-  console.log(userMessage)
-  const botText = userMessage; // temporary
-  const botMessageElement = createMessageElement(botText, "bot-text")
+const handleMessage = async function(userMessage) {
+    console.log(userMessage)
+    const botText = await generateText(userMessage); // temporary
 
-  const chatBody = document.querySelector(".chat-body");
-  const chatMessage = document.querySelector(".chat-body .bot-text");
+    const botMessageElement = createMessageElement(botText, "bot-text")
 
-  chatBody.replaceChild(botMessageElement, chatMessage);
-  console.log(generateBotResponse(userMessage))
+    const chatBody = document.querySelector(".chat-body");
+    const chatMessage = document.querySelector(".chat-body .bot-text");
+    chatBody.replaceChild(botMessageElement, chatMessage);
 }
 
 
 document.querySelector(".message-input").addEventListener("keydown", function(e){
   const userMessage = e.target.value.trim();
   if (e.key === "Enter" && userMessage) {
-    handleMessage(userMessage)
+    handleMessage(userMessage);
+    e.preventDefault();
+        
   }
 })
 
 // generate bot's response with Gemini API
-const generateBotResponse = async function(userMessage) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{
-        parts: [{ text: userMessage }]
-      }]
-    })
-  }
-  try {
-    // fetch response from API
-    const response = await fetch(API_URL, requestOptions);
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error.message);
 
-    console.log(data);
-  }
-  catch (error) {
-    console.log(error);
-  }
+
+async function generateText(prompt) {
+    const apiKey = "AIzaSyBF25RiQ9RSbgxXVyP5gVRCrRujLqk8IjA"; // Replace with your actual API key
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+    const data = {
+        contents: [{
+            parts: [{ text: prompt }]
+        }]
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            console.error("API Error:", error);
+            return null;
+        }
+
+        const result = await response.json();
+        
+        //return result; // Process the response as needed
+
+        const responseText = result.candidates[0].content.parts[0].text.trim();
+        console.log("API Response:", responseText);
+        return responseText;
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        return null;
+    }
 }
 
