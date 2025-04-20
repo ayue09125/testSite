@@ -10,19 +10,24 @@ const createMessageElement = function(content, classes) {
 
 const handleMessage = async function(userMessage) {
     console.log(userMessage)
-    const botText = await generateText(userMessage); // temporary
+    const botText = await generateText(userMessage);
 
     const botMessageElement = createMessageElement(botText, "bot-text")
 
     const chatBody = document.querySelector(".chat-body");
-    const chatMessage = document.querySelector(".chat-body .bot-text");
-    chatBody.replaceChild(botMessageElement, chatMessage);
+    const thinking = document.querySelector(".chat-body .thinking");
+    chatBody.replaceChild(botMessageElement, thinking);
 }
 
 
 document.querySelector(".message-input").addEventListener("keydown", function(e){
   const userMessage = e.target.value.trim();
   if (e.key === "Enter" && userMessage) {
+
+    const loadingElement = createMessageElement("<div class='dot'></div><div class= 'dot'></div><div class='dot'></div>", "thinking")
+    const chatBody = document.querySelector(".chat-body");
+    const chatMessage = document.querySelector(".chat-body .bot-text");
+    chatBody.replaceChild(loadingElement, chatMessage);
     handleMessage(userMessage);
     e.preventDefault();
         

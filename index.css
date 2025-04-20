@@ -44,6 +44,7 @@ body {
   width: 26rem;
   height: 2rem;
   border-radius: 0.5rem;
+  padding-left: 0.3rem;
   resize: none;
   overflow-x: auto;
   white-space: nowrap;
