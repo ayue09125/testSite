@@ -11,15 +11,16 @@ const createMessageElement = function(content, classes) {
 const handleMessage = async function(userMessage) {
     console.log(userMessage)
     const botText = await generateText(userMessage);
+    const formattedBotText = botText.replaceAll("\n", "<br>");
 
-    const botMessageElement = createMessageElement(botText, "bot-text")
+    const botMessageElement = createMessageElement(formattedBotText, "bot-text")
 
     const chatBody = document.querySelector(".chat-body");
     const thinking = document.querySelector(".chat-body .thinking");
     chatBody.replaceChild(botMessageElement, thinking);
 }
 
-
+// submit prompt with enter key functionality
 document.querySelector(".message-input").addEventListener("keydown", function(e){
   const userMessage = e.target.value.trim();
   if (e.key === "Enter" && userMessage) {
@@ -34,9 +35,18 @@ document.querySelector(".message-input").addEventListener("keydown", function(e)
   }
 })
 
+// submit prompt button functionality
+document.querySelector(".material-symbols-rounded").addEventListener("click", function(){
+  const userMessage = document.querySelector(".message-input").value
+  const loadingElement = createMessageElement("<div class='dot'></div><div class= 'dot'></div><div class='dot'></div>", "thinking")
+  const chatBody = document.querySelector(".chat-body");
+  const chatMessage = document.querySelector(".chat-body .bot-text");
+  chatBody.replaceChild(loadingElement, chatMessage);
+  handleMessage(userMessage);
+})
+
+
 // generate bot's response with Gemini API
-
-
 async function generateText(prompt) {
     const apiKey = "AIzaSyBF25RiQ9RSbgxXVyP5gVRCrRujLqk8IjA"; // Replace with your actual API key
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -63,9 +73,6 @@ async function generateText(prompt) {
         }
 
         const result = await response.json();
-        
-        //return result; // Process the response as needed
-
         const responseText = result.candidates[0].content.parts[0].text.trim();
         console.log("API Response:", responseText);
         return responseText;
