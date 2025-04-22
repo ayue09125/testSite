@@ -1,4 +1,4 @@
-import { generateText } from "./api/generate.js"
+import generateText from "./api/generate.js"
 
 const createMessageElement = function(content, classes) {
   const div = document.createElement("div");

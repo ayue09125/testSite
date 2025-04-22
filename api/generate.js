@@ -2,7 +2,8 @@
 
 
 // generate bot's response with Gemini API
-export async function generateText(prompt) {
+export default async function generateText(prompt) {
+  console.log(prompt);
   const apiKey = process.env.GEMINI_API_KEY;
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`; 
   const data = {
