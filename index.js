@@ -1,4 +1,5 @@
-
+const apiKey = process.env.GEMINI_API_KEY;
+const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
 const createMessageElement = function(content, classes) {
   const div = document.createElement("div");
@@ -47,10 +48,7 @@ document.querySelector(".material-symbols-rounded").addEventListener("click", fu
 
 
 // generate bot's response with Gemini API
-async function generateText(prompt) {
-    const apiKey = "AIzaSyBF25RiQ9RSbgxXVyP5gVRCrRujLqk8IjA"; // Replace with your actual API key
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
+async function generateText(prompt) {    
     const data = {
         contents: [{
             parts: [{ text: prompt }]
