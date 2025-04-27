@@ -11,7 +11,7 @@ export default async function generateText(prompt) {
           parts: [{ text: prompt }]
       }]
   };
-
+  console.log(data)
   try {
       const response = await fetch(url, {
           method: 'POST',
